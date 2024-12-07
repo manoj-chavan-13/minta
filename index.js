@@ -2,6 +2,7 @@ const express = require("express");
 const QRCode = require("qrcode");
 const app = express();
 const port = 3000;
+const path = require("path");
 
 // Simulated database of certificates
 const certificates = [
@@ -66,7 +67,7 @@ app.get("/intern/verify", (req, res) => {
   }
 
   // Render the page with the certificate data or error
-  res.render("verify", { certificate, error });
+  res.render("verify.ejs", { certificate, error });
 });
 
 // Start the server
