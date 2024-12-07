@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Certificate Verification</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #ffffff;
+            /* White background */
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            color: #4CAF50;
+            /* Green color for header */
+            margin-bottom: 40px;
+            text-align: center;
+        }
+
+        /* Container to center all content */
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Card Style for Result Section */
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 60px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            margin-top: 20px;
+            text-align: left;
+            line-height: 1.6;
+        }
+
+        .card h2 {
+            color: #000000;
+            /* Green color for card heading */
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #555;
+            margin: 8px 0;
+        }
+
+        .card strong {
+            font-weight: bold;
+            color: #4CAF50;
+            /* Green color for strong text */
+        }
+
+        /* Button Style */
+        .btn {
+            display: inline-block;
+            background-color: #4CAF50;
+            /* Green button color */
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1rem;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #45a049;
+            /* Darker green on hover */
+        }
+
+        .btn-secondary {
+            background-color: #E0E0E0;
+            color: #333;
+            margin-top: 20px;
+        }
+
+        .btn-secondary:hover {
+            background-color: #D1D1D1;
+        }
+
+        /* Error Message */
+        .error {
+            color: #E74C3C;
+            background-color: #F8D7DA;
+            padding: 15px;
+            border-radius: 4px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        /* Form Styles */
+        .form-container {
+            background-color: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-top: 30px;
+        }
+
+        .form-container h2 {
+            font-size: 1.5rem;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        /* Flexbox layout for input and button */
+        .form-container form {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-container input {
+            width: 80%;
+            padding: 12px;
+            margin-right: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 1rem;
+            color: #333;
+        }
+
+        .form-container button {
+            width: 18%;
+            padding: 12px;
+            background-color: #4CAF50;
+            /* Green button */
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 1.1rem;
+        }
+
+        .form-container button:hover {
+            background-color: #45a049;
+            /* Darker green on hover */
+        }
+
+
+  .f{
+                color: black;
+            }
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .form-container {
+                padding: 20px;
+            }
+
+            .form-container form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .form-container input
+                {
+                width: 90%;
+                margin-bottom: 10px;
+            }
+            
+
+            .form-container button {
+                margin-left: auto;
+                margin-right: auto;
+                width: 50%;
+                margin-bottom: 10px;
+            }
+
+
+        }
+
+        
+          
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Certificate Verification</h1>
+
+        <!-- Display Certificate Details if Found -->
+        <% if (certificate) { %>
+            <div class="card">
+                <h2 class="f">Certificate Found!</h2>
+                <p><strong>Certificate ID:</strong>
+                    <%= certificate.id %>
+                </p>
+                <p><strong>Name:</strong>
+                    <%= certificate.name %>
+                </p>
+                <p><strong>Internship Position:</strong>
+                    <%= certificate.course %>
+                </p>
+                <p><strong>Duration:</strong>
+                    <%= certificate.duration %>
+                </p>
+                <p><strong>Description:</strong>
+                    <%= certificate.description %>
+                </p>
+            </div>
+            <% } %>
+
+                <!-- Error Message if Certificate Not Found -->
+                <% if (error) { %>
+                    <div class="error">
+                        <p>
+                            <%= error %>
+                        </p>
+                    </div>
+                    <% } %>
+
+                        <!-- Certificate ID Form (For Manual Entry) -->
+                        <div class="form-container">
+                            <h2>Enter the Certificate ID below:</h2>
+                            <form action="/intern/verify" method="GET">
+                                <input type="text" id="certificate_id" name="certificate_id_from_form"
+                                    placeholder="Enter Certificate ID" required>
+                                <button type="submit">Verify</button>
+                            </form>
+                        </div>
+    </div>
+
+</body>
+
+</html>
