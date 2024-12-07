@@ -46,28 +46,32 @@ app.get("/generate-qr/:certificateId", (req, res) => {
   });
 });
 
-// Verify certificate route (Validation)
 app.get("/intern/verify", (req, res) => {
-  const certificateId =
-    req.query.certificate_id || req.query.certificate_id_from_form; // Get the certificate ID either from the QR code or the form
+  // Serve the HTML file instead of EJS
+  res.sendFile(path.join(__dirname, "public", "verify.html")); // Adjust path as needed
+});
+// Verify certificate route (Validation)
+
+app.get("/intern/verify/certificate", (req, res) => {
+  const certificateId = req.query.certificate_id;
+
   let certificate = null;
   let error = null;
 
   if (!certificateId) {
-    // If no certificate ID is entered, show an error
     error = "Please enter a valid certificate ID.";
   } else {
-    // Try to find the certificate
     certificate = certificates.find((cert) => cert.id === certificateId);
-
     if (!certificate) {
-      // If no certificate found, show an error
       error = "Certificate ID not found.";
     }
   }
 
-  // Render the page with the certificate data or error
-  res.render("verify.ejs", { certificate, error });
+  if (error) {
+    return res.json({ error });
+  } else {
+    return res.json({ certificate });
+  }
 });
 
 // Start the server
