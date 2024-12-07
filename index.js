@@ -1,8 +1,8 @@
 const express = require("express");
 const QRCode = require("qrcode");
+const path = require("path");
 const app = express();
 const port = 3000;
-const path = require("path");
 
 // Simulated database of certificates
 const certificates = [
@@ -16,13 +16,10 @@ const certificates = [
   },
 ];
 
-// Set up view engine
+// Set up the static files and view engine (Assuming EJS is used)
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views")); // Set the views directory
-
+app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
-
-// Middleware to parse query parameters from the URL
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -36,21 +33,21 @@ app.get("/generate-qr/:certificateId", (req, res) => {
   const certificateId = req.params.certificateId;
   const url = `https://minta.in/intern/verify?certificate_id=${certificateId}`; // URL to be encoded in QR code
 
-  QRCode.toDataURL(url, (err, qrCodeDataUrl) => {
-    if (err) {
-      res.status(500).send("Error generating QR code");
-    } else {
+  generateQRCode(url)
+    .then((qrCodeDataUrl) => {
       res.send(`<img src="${qrCodeDataUrl}" alt="QR Code" />`);
-    }
-  });
+    })
+    .catch((err) => {
+      res.status(500).json({ error: "Error generating QR code", details: err });
+    });
 });
 
-app.get("/intern/verify", (req, res) => {
-  // Serve the HTML file instead of EJS
-  res.sendFile(path.join(__dirname, "public", "verify.html")); // Adjust path as needed
-});
 // Verify certificate route (Validation)
+app.get("/intern/verify", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "verify.html"));
+});
 
+// Certificate validation
 app.get("/intern/verify/certificate", (req, res) => {
   const certificateId = req.query.certificate_id;
 
@@ -67,11 +64,24 @@ app.get("/intern/verify/certificate", (req, res) => {
   }
 
   if (error) {
-    return res.json({ error });
+    return res.status(400).json({ error });
   } else {
     return res.json({ certificate });
   }
 });
+
+// QR Code generation helper function
+function generateQRCode(url) {
+  return new Promise((resolve, reject) => {
+    QRCode.toDataURL(url, (err, qrCodeDataUrl) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(qrCodeDataUrl);
+      }
+    });
+  });
+}
 
 // Start the server
 app.listen(port, () => {
