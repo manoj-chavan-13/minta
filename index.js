@@ -1,8 +1,15 @@
-const express = require("express");
-const QRCode = require("qrcode");
-const path = require("path");
+import express from "express";
+import { toDataURL } from "qrcode";
+import { join } from "path";
+import { fileURLToPath } from "url";
+import { dirname } from "path";
+
 const app = express();
 const port = 3000;
+
+// Get the current directory using ES module-specific method
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 // Simulated database of certificates
 const certificates = [
@@ -18,8 +25,8 @@ const certificates = [
 
 // Set up the static files and view engine (Assuming EJS is used)
 app.set("view engine", "ejs");
-app.set("views", path.join(__dirname, "views"));
-app.use(express.static(path.join(__dirname, "public")));
+app.set("views", join(__dirname, "views"));
+app.use(express.static(join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
@@ -44,7 +51,7 @@ app.get("/generate-qr/:certificateId", (req, res) => {
 
 // Verify certificate route (Validation)
 app.get("/intern/verify", (req, res) => {
-  res.sendFile(path.join(__dirname, "public", "verify.html"));
+  res.sendFile(join(__dirname, "public", "verify.html"));
 });
 
 // Certificate validation
@@ -73,7 +80,7 @@ app.get("/intern/verify/certificate", (req, res) => {
 // QR Code generation helper function
 function generateQRCode(url) {
   return new Promise((resolve, reject) => {
-    QRCode.toDataURL(url, (err, qrCodeDataUrl) => {
+    toDataURL(url, (err, qrCodeDataUrl) => {
       if (err) {
         reject(err);
       } else {
