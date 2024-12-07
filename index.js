@@ -20,8 +20,7 @@ const certificates = [
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views")); // Set the views directory
 
-// Serve static files (for CSS and JS)
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
 // Middleware to parse query parameters from the URL
 app.use(express.urlencoded({ extended: true }));
