@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    
+
     <title>Certificate Verification</title>
     <link rel="icon" href="2.png" type="image/x-icon">
 
@@ -67,6 +67,10 @@
             border-radius: 4px;
             cursor: pointer;
             font-size: 1rem;
+            margin-top: 20px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
         }
 
         .btn:hover {
@@ -136,13 +140,13 @@
         <h1>Certificate Verification</h1>
 
         <!-- Result Section -->
-        <div id="result"></div>
+        <div id="result" style="margin-top: 30px;"></div>
 
         <!-- Error Message -->
         <div id="error-message" class="error" style="display:none;"></div>
 
         <!-- Certificate ID Form (For Manual Entry) -->
-        <div class="form-container">
+        <div class="form-container" id="form-container">
             <h2>Enter the Certificate ID below:</h2>
             <form id="certificate-form">
                 <input type="text" id="certificate_id" name="certificate_id" placeholder="Enter Certificate ID"
@@ -153,24 +157,23 @@
     </div>
 
     <script>
-        document.getElementById('certificate-form').addEventListener('submit', function (event) {
-            event.preventDefault();
-
-            const certificateId = document.getElementById('certificate_id').value;
-            const resultDiv = document.getElementById('result');
-            const errorMessage = document.getElementById('error-message');
+        // Helper function to fetch and display certificate data
+        function fetchCertificateData(certificateId) {
+            const resultDiv = document.getElementById("result");
+            const errorMessage = document.getElementById("error-message");
+            const formContainer = document.getElementById("form-container");
 
             // Reset any previous results or error messages
             resultDiv.innerHTML = '';
             errorMessage.style.display = 'none';
 
             fetch(`/intern/verify/certificate?certificate_id=${certificateId}`)
-                .then(response => response.json())
-                .then(data => {
+                .then((response) => response.json())
+                .then((data) => {
                     if (data.error) {
                         // Show error if certificate not found
                         errorMessage.textContent = data.error;
-                        errorMessage.style.display = 'block';
+                        errorMessage.style.display = "block";
                     } else {
                         // Display certificate details if found
                         const certificate = data.certificate;
@@ -183,14 +186,41 @@
                                 <p><strong>Duration:</strong> ${certificate.duration}</p>
                                 <p><strong>Description:</strong> ${certificate.description}</p>
                             </div>
+                            <button class="btn" id="verify-another">Verify Another Certificate</button>
                         `;
+                        // Hide the form container
+                        formContainer.style.display = 'none';
+
+                        // Add event listener for "Verify Another" button
+                        document.getElementById("verify-another").addEventListener("click", () => {
+                            // Reset the UI
+                            formContainer.style.display = 'block';
+                            resultDiv.innerHTML = '';
+                            document.getElementById("certificate_id").value = '';
+                        });
                     }
                 })
-                .catch(error => {
+                .catch((error) => {
                     console.error("Error:", error);
                     errorMessage.textContent = "Something went wrong. Please try again later.";
-                    errorMessage.style.display = 'block';
+                    errorMessage.style.display = "block";
                 });
+        }
+
+        // Handle direct URL query parameter
+        const params = new URLSearchParams(window.location.search);
+        const certificateIdFromUrl = params.get("certificate_id");
+
+        if (certificateIdFromUrl) {
+            // If a certificate ID is present in the URL, fetch the data automatically
+            fetchCertificateData(certificateIdFromUrl);
+        }
+
+        // Handle manual form submission
+        document.getElementById("certificate-form").addEventListener("submit", function (event) {
+            event.preventDefault();
+            const certificateId = document.getElementById("certificate_id").value;
+            fetchCertificateData(certificateId);
         });
     </script>
 
