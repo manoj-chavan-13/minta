@@ -5,17 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>Certificate Verification</title>
+    <title>Verification</title>
     <link rel="icon" href="2.png" type="image/x-icon">
 
     <style>
-        /* Add your styles here */
+
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: #ffffff;
             color: #333;
             margin: 0;
             padding: 0;
+            min-height: 100vh;
+    
+            display: flex;
+            flex-direction: column;
         }
 
         h1 {
@@ -29,6 +33,8 @@
             max-width: 900px;
             margin: 0 auto;
             padding: 20px;
+            flex-grow: 1;
+        
         }
 
         .card {
@@ -131,6 +137,23 @@
         .f {
             color: black;
         }
+
+        footer {
+            background-color: #333;
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        .footer-content a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        .footer-content a:hover {
+            text-decoration: underline;
+        }
     </style>
 </head>
 
@@ -139,13 +162,12 @@
     <div class="container">
         <h1>Certificate Verification</h1>
 
-        <!-- Result Section -->
         <div id="result" style="margin-top: 30px;"></div>
 
-        <!-- Error Message -->
+     
         <div id="error-message" class="error" style="display:none;"></div>
 
-        <!-- Certificate ID Form (For Manual Entry) -->
+   
         <div class="form-container" id="form-container">
             <h2>Enter the Certificate ID below:</h2>
             <form id="certificate-form">
@@ -156,14 +178,21 @@
         </div>
     </div>
 
+    <footer>
+        <div class="footer-content">
+            <p>&copy; 2024 Minta. All rights reserved.</p>
+            <p>Contact us: <a href="mailto:info@minta.in">info@minta.in</a></p>
+        </div>
+    </footer>
+
     <script>
-        // Helper function to fetch and display certificate data
+      
         function fetchCertificateData(certificateId) {
             const resultDiv = document.getElementById("result");
             const errorMessage = document.getElementById("error-message");
             const formContainer = document.getElementById("form-container");
 
-            // Reset any previous results or error messages
+           
             resultDiv.innerHTML = '';
             errorMessage.style.display = 'none';
 
@@ -171,29 +200,29 @@
                 .then((response) => response.json())
                 .then((data) => {
                     if (data.error) {
-                        // Show error if certificate not found
+                       
                         errorMessage.textContent = data.error;
                         errorMessage.style.display = "block";
                     } else {
-                        // Display certificate details if found
+                        
                         const certificate = data.certificate;
                         resultDiv.innerHTML = `
                             <div class="card">
                                 <h2 class="f">Certificate Found!</h2>
                                 <p><strong>Certificate ID:</strong> ${certificate.id}</p>
                                 <p><strong>Name:</strong> ${certificate.name}</p>
-                                <p><strong>Internship Position:</strong> ${certificate.course}</p>
+                                <p><strong>Position:</strong> ${certificate.course}</p>
                                 <p><strong>Duration:</strong> ${certificate.duration}</p>
                                 <p><strong>Description:</strong> ${certificate.description}</p>
                             </div>
                             <button class="btn" id="verify-another">Verify Another Certificate</button>
                         `;
-                        // Hide the form container
+                      
                         formContainer.style.display = 'none';
 
-                        // Add event listener for "Verify Another" button
+                     
                         document.getElementById("verify-another").addEventListener("click", () => {
-                            // Reset the UI
+                    
                             formContainer.style.display = 'block';
                             resultDiv.innerHTML = '';
                             document.getElementById("certificate_id").value = '';
@@ -207,16 +236,16 @@
                 });
         }
 
-        // Handle direct URL query parameter
+        
         const params = new URLSearchParams(window.location.search);
         const certificateIdFromUrl = params.get("certificate_id");
 
         if (certificateIdFromUrl) {
-            // If a certificate ID is present in the URL, fetch the data automatically
+    
             fetchCertificateData(certificateIdFromUrl);
         }
 
-        // Handle manual form submission
+        
         document.getElementById("certificate-form").addEventListener("submit", function (event) {
             event.preventDefault();
             const certificateId = document.getElementById("certificate_id").value;
