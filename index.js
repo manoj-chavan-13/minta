@@ -16,8 +16,40 @@ const certificates = [
   {
     id: "MN_21Nov2113",
     name: "Nikita Wagh",
+    course: "Mobile Developer Intern",
+    duration: "October 2024 to November 2024",
+    description:
+      "Contributed to developing and optimizing mobile applications, collaborating with design teams, and gaining hands-on experience with mobile development technologies.",
+  },
+  {
+    id: "FD_21Nov2101",
+    name: "Janhavi Mahajan",
     course: "Frontend Developer Intern",
-    duration: "August 2024 to November 2024",
+    duration: "October 2024 to November 2024",
+    description:
+      "Contributed to developing and optimizing user interfaces, collaborating with design teams, and gaining hands-on experience with frontend technologies.",
+  },
+  {
+    id: "FD_21Nov2102",
+    name: "Hetal Patil",
+    course: "Frontend Developer Intern",
+    duration: "October 2024 to November 2024",
+    description:
+      "Contributed to developing and optimizing user interfaces, collaborating with design teams, and gaining hands-on experience with frontend technologies.",
+  },
+  {
+    id: "FD_21Nov2103",
+    name: "Diksha Patil",
+    course: "Frontend Developer Intern",
+    duration: "October 2024 to November 2024",
+    description:
+      "Contributed to developing and optimizing user interfaces, collaborating with design teams, and gaining hands-on experience with frontend technologies.",
+  },
+  {
+    id: "FD_21Nov2104",
+    name: "Priyanka Chaudhari",
+    course: "Frontend Developer Intern",
+    duration: "October 2024 to November 2024",
     description:
       "Contributed to developing and optimizing user interfaces, collaborating with design teams, and gaining hands-on experience with frontend technologies.",
   },
